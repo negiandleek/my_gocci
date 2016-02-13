@@ -1,0 +1,55 @@
+.hero-scroll{
+	position: absolute;
+	height: 65px;
+	width: 165px;
+	top: 75%;
+	left: 0;
+	right: 0;
+	margin: auto;
+	cursor: pointer;
+	&__small{
+		color: white;
+		font-size: 1.2em;
+	}
+	&__arrow{
+		position: absolute;
+		height: 35px;
+		width: 30px;
+		left: 50%;
+		transform: translateX(-50%);
+		animation: hero-scroll-animation 2s ease infinite;
+		&:before{
+			content: "";
+			position: absolute;
+			height: 25px;
+			width: 30px;
+			left: -1px;
+			border-bottom: 1px solid #fff;
+			transform: rotate(45deg);
+		}
+		&:after{
+			content: "";
+			position: absolute;
+			height: 25px;
+			width: 30px;
+			left: 1px;
+			border-bottom: 1px solid #fff;
+			transform: rotate(-45deg);
+		}
+	}
+}
+
+@keyframes hero-scroll-animation{
+	0% {
+		margin-top: 18px;
+	}
+	50%{
+		margin-top: 30px;
+	}
+	75%{
+		margin-top: 30px;
+	}
+	100%{
+		margin-top: 18px
+	}
+}
