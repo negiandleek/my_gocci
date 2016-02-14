@@ -5,7 +5,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-//const api = require('./routes/api.js');
+const api = require('./routes/api.js');
 const app = express();
 
 const baseApiUrl = '/mygocci/api';
@@ -22,24 +22,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static((__dirname , 'dist')));
 
-//routing
-// app.all('*',(req,res,next) => {
-//     res.contentType('json'); //contentTypeについて学ぶ
-//     res.header( 'Access-Control-Allow-Origin', '*' );
-//     next();
-// });
-
-// app.get('/',(req,res,next) => {
-//     res.send('ok');
-// })
-
-// app.get('/mygocci/api/get/photo', (req,res,next) => {
-//     next();
-// });
-
-
 //middleware
-// app.use(baseApiUrl,api);
+app.use(baseApiUrl,api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
