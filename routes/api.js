@@ -18,20 +18,6 @@ router.all('/*', (req,res,next) => {
     next();
 });
 
-router.route('/insert')
-    .get((req,res)=>{
-        for(let i = 0; i < 7; i++){
-            let post = new Post({
-                post_user_id: data[i].post_user_id,
-                post_rest_id: data[i].post_rest_id,
-                movie: data[i].movie,
-            },{collection: 'posts'});
-            post.save();
-            res.send();
-        }
-    });
-
-
 router.get('/get/chat',(req,res) => {
     res.json();
 });
