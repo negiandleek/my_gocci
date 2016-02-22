@@ -1,9 +1,10 @@
 'use strict';
-const React = require('react');
-const ReactDOM = require('react-dom');
-const {Router,Route,IndexRoute} = require('react-router');
-
-const Main = require('./components/Main.react.js');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Router,Route,IndexRoute} from 'react-router';
+import {Provider} from 'react-redux';
+import {createStore} from 'redux';
+import Main from './components/Main.react';
 
 const Routes = (
 	<Route>
