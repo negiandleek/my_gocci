@@ -1,9 +1,8 @@
 const DomModule = (() => {
 	let windowHeight;
 	let domHeight;
-
-	function calculationHeight (height) {
-		let wholeHeight = height + 65 + 70;
+	function calculationHeight () {
+		let wholeHeight = domHeight + 65 + 70;
 		let diff;
 		diff = windowHeight - wholeHeight;
 		if(diff <= 0){
@@ -17,8 +16,12 @@ const DomModule = (() => {
 		setWindowHeight: function (height){
 			windowHeight = height;
 		},
-		getDiffHeight: function (height) {
-			return calculationHeight(height);
+		setHeight: function (height) {
+			domHeight = height
+		},
+		getDiffHeight: function () {
+			console.log(calculationHeight());
+			return calculationHeight();
 		}
 	}
 })();

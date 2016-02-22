@@ -4,17 +4,16 @@ import ReactDOM from 'react-dom';
 import {Router,Route,IndexRoute} from 'react-router';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
-import Main from './components/Main.react';
+import App from './containers/App.react';
+import mygocciApp from './reducers';
 
-const Routes = (
-	<Route>
-		<Route path='/' component={Main} />
-	</Route>
-);
- 
+let store = createStore(mygocciApp);
+
 document.addEventListener('DOMContentLoaded', () => {
 	ReactDOM.render(
-		<Router>{Routes}</Router>,
-		document.getElementById('root')
-	);
+		<Provider store={store}>
+			<App />
+		</Provider>,
+ 		document.getElementById('root')
+	)
 });

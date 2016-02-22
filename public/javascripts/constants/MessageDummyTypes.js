@@ -1,0 +1,1 @@
+export const SET_SIZE_HEIGHT = 'SET_SIZE_HEIGHT';
