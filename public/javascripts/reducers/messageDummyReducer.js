@@ -10,7 +10,7 @@ const initialState = {
 	height: ''
 };
 
-function mainReducer(state = initialState, action) {
+function messageDummyReducer(state = initialState, action) {
   	switch (action.type) {
     	case SET_SIZE_HEIGHT:
       		return {
@@ -21,4 +21,4 @@ function mainReducer(state = initialState, action) {
 	     	return state
 	}
 }
-module.exports = mainReducer;
+module.exports = messageDummyReducer;

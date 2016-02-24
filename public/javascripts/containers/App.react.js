@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import domModule from '../utilities/domModule';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import * as messageDummyAction from '../actions/messageDummyAction'
+import * as messageDummyAction from '../actions/messageDummyAction';
+import * as messagesActions from '../actions/messagesActions';
 //component
 import Hero from '../components/Hero.react';
 import MessageDummy from '../components/MessageDummy.react';
@@ -14,36 +15,40 @@ import ThreadHeader from '../components/ThreadHeader.react';
 class App extends Component {
 	constructor (props) {
 		super(props);
-		this.state = {
-			isShowHero: true,
-			messages: [
-				{value: 'こんちはっす\nお話しするっす',isMyself: 0},
-				{value: '近くのお店', isMyself: 1}
-			]
-		};
+		
+		this.messageGlobalHeight;
+		this.setDummyStyle = this.setDummyStyle.bind(this);
 	}
 	componentWillMount () {
 		window.scrollTo(0,0);
 	}
 	componentDidMount () {
 		domModule.setWindowHeight(window.innerHeight);
-		domModule.setHeight(ReactDOM.findDOMNode(this.refs['message-global']).scrollHeight);
+		this.messageGlobalHeight = ReactDOM.findDOMNode(this.refs['message-global']).scrollHeight;
+		this.setDummyStyle();
+	}
+	componentDidUpdate () {
+		let _height = ReactDOM.findDOMNode(this.refs['message-global']).scrollHeight;
+		if(this.messageGlobalHeight === _height)return;
+		this.messageGlobalHeight = _height;
+		this.setDummyStyle();
+	}
+	setDummyStyle () {
+		let diffHeight = domModule.getDiffHeight(this.messageGlobalHeight);
+		this.props.dummyMessageAction.setSizeHeight(diffHeight);
+		//Most Scroll down
+		domModule.scrollUnder(this.messageGlobalHeight)
 	}
 	render () {
 		return (
 			<div className='main'>
-				{this.state.isShowHero
-					? <Hero />
-					: null
-				}
+				<Hero />
 				<div className='thread'>
 					<ThreadHeader />
-					<MessageDummy 
-						actions={this.props.actions}
-					/>
 					<div className='thread__wrapper'>
+						<div className='message-dummy' style={this.props.styleDummy}></div>
 						<ul className='message-global' ref='message-global'>
-							{this.state.messages.map((items,index) => {
+							{this.props.messages.map((items,index) => {
 								return (
 									<Messages
 										key={'message'+index}
@@ -54,7 +59,9 @@ class App extends Component {
 							})}
 						</ul>
 					</div>
-					<MessageForm/>
+					<MessageForm
+						addMessage={this.props.messageActions.addMessage}
+					/>
 				</div>
 			</div>
 		);
@@ -63,13 +70,15 @@ class App extends Component {
 
 function mapStateToProps(state) {
 	return {
-		styleDummy: state.mainReducer
+		styleDummy: state.messageDummyReducer,
+		messages: state.messageReducer
 	}
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		actions: bindActionCreators(messageDummyAction, dispatch)
+		dummyMessageAction: bindActionCreators(messageDummyAction,dispatch),
+		messageActions: bindActionCreators(messagesActions,dispatch)
 	}
 }
 

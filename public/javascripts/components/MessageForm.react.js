@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 class MessageForm extends React.Component {
 	constructor (props){
 		super(props);
+		this.state = {
+			textValue: ''
+		}
 		this.focusMessageForm = this.focusMessageForm.bind(this);
 		this.keyDownFunc = this.keyDownFunc.bind(this);
 		this.tabbrowserFocus = this.tabbrowserFocus.bind(this);
@@ -19,7 +22,20 @@ class MessageForm extends React.Component {
 		ReactDOM.findDOMNode(this.refs.message).focus();
 		this.refs.message.focus();
 	}
+	inputText (event) {
+		this.setState({
+			textValue: event.target.value
+		});
+	}
 	keyDownFunc (event) {
+		if(event.keyCode === 13){
+			event.preventDefault();
+			this.props.addMessage(this.state.textValue,1);
+			this.setState({
+				textValue: ''
+			});
+			return;
+		}
 		//tab pressed
 		if(event.keyCode === 9){
 			event.preventDefault();
@@ -37,9 +53,11 @@ class MessageForm extends React.Component {
 			<form className='message-form'>
 				<input 
 					className='text-form'
-					type='text' 
-					placeholder='gocci君に指示を送る'
 					ref='message'
+					type='text'
+					placeholder='gocci君と会話する'
+					value={this.state.textValue}
+					onChange={this.inputText.bind(this)}
 				/>
 			</form>
 		);
