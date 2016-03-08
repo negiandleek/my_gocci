@@ -7,7 +7,6 @@ import * as messageDummyAction from '../actions/messageDummyAction';
 import * as messagesActions from '../actions/messagesActions';
 //component
 import Hero from '../components/Hero.react';
-import MessageDummy from '../components/MessageDummy.react';
 import MessageForm from '../components/MessageForm.react';
 import Messages from '../components/Messages.react';
 import ThreadHeader from '../components/ThreadHeader.react';
@@ -37,7 +36,7 @@ class App extends Component {
 		let diffHeight = domModule.getDiffHeight(this.messageGlobalHeight);
 		this.props.dummyMessageAction.setSizeHeight(diffHeight);
 		//Most Scroll down
-		domModule.scrollUnder(this.messageGlobalHeight)
+		//domModule.scroll_most_bottom(this.messageGlobalHeight)
 	}
 	render () {
 		return (

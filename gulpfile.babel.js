@@ -10,7 +10,6 @@ import source from 'vinyl-source-stream'
 import buffer from 'vinyl-buffer'
 import pngquant from 'imagemin-pngquant'
 import historyApiFallback from 'connect-history-api-fallback'
-import nodemon from 'nodemon'
 
 var seq = runSequence.use(gulp)
 var $ = gulpLoadPlugins({
@@ -19,7 +18,8 @@ var $ = gulpLoadPlugins({
 var path = {
     public: 'public/',
     browserifyCache: '.browserify-cache/',
-    dist: 'dist/',
+    static: 'static/',
+    view: 'view/',
     styleEntrypoint: 'main.scss',
     jsEntrypoint: 'main.js',
     js: 'public/javascripts/',
@@ -27,8 +27,6 @@ var path = {
     jsFiles: '**/*.{js,jsx,es6}',
     mediaFiles: '**/*.{mp4,webm,ogv,ogg,mp3,ogg,wav,aiff}',
     imageFiles: '**/*.{jpg,jpeg,gif,png,svg}',
-    app: 'bin/www',
-    routes: 'routes/',
 }
 var opts = {
     isWatching: false,
@@ -48,7 +46,7 @@ gulp.task('build:sass', function() {
           },
           minifier: true
         }))
-        .pipe(gulp.dest(path.dist))
+        .pipe(gulp.dest(path.static))
         .pipe($.notify({
             message: 'Styles task complete'
         }))
@@ -97,7 +95,7 @@ function compile() {
             })
             .pipe(source('bundle.js'))
             .pipe(buffer())
-            .pipe(gulp.dest(path.dist))
+            .pipe(gulp.dest(path.static))
             if (opts.isDebug) {
                 _bundle = _bundle.pipe($.sourcemaps.init({
                     loadMaps: true
@@ -117,25 +115,25 @@ gulp.task('build:js', (cb) => {
 gulp.task('mv:html', (cb) => {
     return gulp.src(path.public + '{,**/}*.html')
         .pipe($.plumber())
-        .pipe(gulp.dest(path.dist))
+        .pipe(gulp.dest(path.view))
 })
 
 // Sounds
 gulp.task('mv:sounds', (cb) => {
     return gulp.src(path.public + path.mediaFiles)
         .pipe($.plumber())
-        .pipe(gulp.dest(path.dist))
+        .pipe(gulp.dest(path.static))
 })
 
 // Images
 gulp.task('mv:images', (cb) => {
     return gulp.src(path.public + path.imageFiles)
         .pipe($.plumber())
-        .pipe(gulp.dest(path.dist))
+        .pipe(gulp.dest(path.static))
 })
 
 gulp.task('min:images', (cb) => {
-  return gulp.src(path.dist + path.imageFiles)
+  return gulp.src(path.static + path.imageFiles)
     .pipe($.imagemin({
         progressive: true,
         svgoPlugins: [{
@@ -143,11 +141,11 @@ gulp.task('min:images', (cb) => {
         }],
         use: [pngquant()]
     })).
-    pipe(gulp.dest(path.dist))
+    pipe(gulp.dest(path.static))
 })
 
 gulp.task('min:html', (cb) => {
-  return gulp.src(path.dist + '/**/*.html')
+  return gulp.src(path.static + '/**/*.html')
         .pipe($.htmlmin({
             collapseWhitespace: true
         }))
@@ -155,9 +153,9 @@ gulp.task('min:html', (cb) => {
 })
 
 gulp.task('publish', (cb) => {
-    return gulp.src(path.dist + '/**/*')
+    return gulp.src(path.static + '/**/*')
             .pipe($.plumber())
-            .pipe(gulp.dest(path.dist))
+            .pipe(gulp.dest(path.static))
 })
 
 gulp.task('enable:watch-mode', (cb) => {
@@ -172,52 +170,8 @@ gulp.task('clean:tmpdir', (cb) => {
     rimraf(path.browserifyCache, cb)
 })
 gulp.task('clean:distdir', (cb) => {
-  rimraf(path.dist, cb)
+  rimraf(path.static, cb)
 })
-
-gulp.task('browser-sync',['nodemon','watch'], () => {
-    //browserSync.init(null,{
-    //    files: [".src/**/*.*"],
-    //    browser: "google chrome",
-    //    proxy: 'http://localhost:1234',
-    //    port: 8000,
-    //    notify: true,
-    //});
-});
-
-gulp.task('nodemon', (cb) => {
-    var called = false;
-    nodemon({
-        script: 'bin/www',
-        ext: 'js',
-        env: {
-            NODE_ENV: 'development'
-        },
-        ignore: [
-            'node_modules/*',
-            'bin/*',
-            'views/*',
-            'public/**/*',
-            '.browserify-cache/*',
-            'sass-cache/*',
-            '.babelrc/*',
-            'gulpfile.babel.js',
-            'package.json',
-            'dist/*'
-        ],
-    })
-    .on('start', function() {
-        if (!called) {
-            called = true;
-            cb();
-        }
-    })
-    .on('restart', function() {
-        setTimeout(function() {
-            browserSync.reload();
-        });
-    });
-});
 
 gulp.task('watch', (cb) => {
     browserSync.init(null,{
@@ -241,7 +195,7 @@ gulp.task('watch', (cb) => {
     $.watch([path.js + '**/*'], function(cb) {
         seq('babel');
     })
-    $.watch([path.dist + '{,**/}*.js'], function(cb){
+    $.watch([path.static + '{,**/}*.js'], function(cb){
         browserSync.reload();
     })
 })
@@ -252,7 +206,7 @@ gulp.task('default', (cb) => {
         'enable:watch-mode',
         ['build:sass', 'mv:html', 'mv:images', 'mv:sounds','babel'],
         'build:js',
-        'browser-sync',
+        'watch',
         'clean:tmpdir',
         cb)
 })
