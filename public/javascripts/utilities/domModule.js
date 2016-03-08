@@ -17,6 +17,12 @@ const DomModule = (() => {
 		},
 		getDiffHeight: function (height) {
 			return calculationHeight(height);
+		},
+		scroll_most_bottom: function (height) {
+			let scroll_position = 50 + height - windowHeight;
+			if(scroll_position >= 0){
+				scrollTo(0,windowHeight + scroll_position);
+			}
 		}
 	}
 })();

@@ -36,7 +36,7 @@ class App extends Component {
 		let diffHeight = domModule.getDiffHeight(this.messageGlobalHeight);
 		this.props.dummyMessageAction.setSizeHeight(diffHeight);
 		//Most Scroll down
-		//domModule.scroll_most_bottom(this.messageGlobalHeight)
+		domModule.scroll_most_bottom(this.messageGlobalHeight)
 	}
 	render () {
 		return (
