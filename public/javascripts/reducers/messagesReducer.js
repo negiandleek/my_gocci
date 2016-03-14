@@ -1,20 +1,25 @@
-import {ADD_MESSAGE} from '../constants/MessagesTypes';
+import * as types from '../constants/MessagesTypes';
 
 const initialState = [
 	{value: 'こんちはっす\nお話しするっす',isMyself: 0},
 	{value: '近くのお店', isMyself: 1}
 ];
 
-function messageReducer(state = initialState, action) {
+function messageReducer(
+    state = initialState, 
+    action,
+    isFetching = true;
+) {
   	switch (action.type) {
-    	case ADD_MESSAGE:
-      		return [
-      			...state,
-      			{
-      				value: action.value,
-      				isMyself: action.isMyself
-      			}
-      		]
+    	case types.REQUEST_TO_ADD_MESSAGE:
+      		return Object.assign({},state,{
+                isFetching: true
+            });
+        case types.REQUEST_TO_ADD_MESSAGE:
+            return Object.assign({},state,{
+                isFetching: true,
+                items: action.posts
+            });
 	    default:
 	     	return state
 	}

@@ -3,11 +3,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router,Route,IndexRoute} from 'react-router';
 import {Provider} from 'react-redux';
-import {createStore} from 'redux';
+import thunk from 'redux-thunk';
+import {createStore,applyMiddleware} from 'redux';
 import App from './containers/App.react';
-import mygocciApp from './reducers';
+import rootReducer from './reducers';
 
-let store = createStore(mygocciApp);
+let store = createStore(
+	rootReducer,
+	applyMiddleware(thunk)
+);
 
 document.addEventListener('DOMContentLoaded', () => {
 	ReactDOM.render(
