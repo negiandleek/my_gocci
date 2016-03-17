@@ -3,3 +3,4 @@ dist/
 .browserify-cache/
 .git
 .sass-cache/
+/__pycache__
