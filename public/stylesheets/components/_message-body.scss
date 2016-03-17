@@ -6,9 +6,9 @@
 		max-width: 80%;
 		float: left;
 		padding: 5px 10px;
-		border: solid 1px #E0E0E0;
+		border: solid 1px $gray;
 		border-radius: 5px;
-		background-color: #E0E0E0;
+		background-color: $gray;
 	}
 	&__content--myself{
 		width: auto;
@@ -19,5 +19,10 @@
 		border: solid 1px $lightorange;
 		border-radius: 5px;
 		background-color: $lightorange;
+		&-invalidate{
+			@extend .message-body__content--myself;
+			border: solid 1px $red;
+			background-color: $red;
+		}
 	}
 }

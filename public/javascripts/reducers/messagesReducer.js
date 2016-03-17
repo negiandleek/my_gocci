@@ -1,27 +1,46 @@
 import * as types from '../constants/MessagesTypes';
 
-const initialState = [
-	{value: 'こんちはっす\nお話しするっす',isMyself: 0},
-	{value: '近くのお店', isMyself: 1}
-];
+const initialState = {
+    message:[
+        {
+            value: 'こんちはっす\nお話しするっす',
+            is_myself: false,
+            is_invalidate: false
+        },
+        {
+            value: '近くのお店', 
+            is_myself: true,
+            is_invalidate: false
+        }
+    ],
+    isFetching: false
+};
 
-function messageReducer(
-    state = initialState, 
-    action,
-    isFetching = true;
-) {
+function message_reducer(state = initialState, action) {
   	switch (action.type) {
     	case types.REQUEST_TO_ADD_MESSAGE:
       		return Object.assign({},state,{
-                isFetching: true
-            });
-        case types.REQUEST_TO_ADD_MESSAGE:
-            return Object.assign({},state,{
+                message: (() => {
+                    return state.message.concat({
+                        value: action.message,
+                        is_myself: true,
+                        is_invalidate: true
+                    });
+                })(),
                 isFetching: true,
-                items: action.posts
+            });
+        case types.RECEIVE_TO_ADD_MESSAGE:
+            return Object.assign({},state,{
+                message: (()=>{
+                    let i = state.message.length - 1;
+                    state.message[i].is_invalidate = false;
+                    return state.message;
+                })(),
+                isFetching: false,
             });
 	    default:
-	     	return state
+	     	return state;
 	}
 }
-module.exports = messageReducer;
+
+module.exports = message_reducer;

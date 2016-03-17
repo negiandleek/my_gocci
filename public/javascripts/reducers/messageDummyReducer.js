@@ -1,10 +1,5 @@
 import {SET_SIZE_HEIGHT} from '../constants/MessageDummyTypes';
 
-const _initialState = [
-	{value: 'こんちはっす\nお話しするっす',isMyself: 0},
-	{value: '近くのお店', isMyself: 1}
-];
-
 const initialState = {
 	display: '',
 	height: ''

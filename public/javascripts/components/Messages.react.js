@@ -7,9 +7,11 @@ class Messages extends React.Component {
 		this.nl2br = this.nl2br.bind(this);
 	}
 	messageClsName () {
-		if(this.props.isMyself === 1){
+		console.log(this.props.is_invalidate);
+		if(this.props.is_myself === true){
 			return ClassNames({
-				'message-body__content--myself': true
+				'message-body__content--myself': !this.props.is_invalidate,
+				"message-body__content--myself-invalidate": this.props.is_invalidate
 			});
 		}else{
 			return ClassNames({

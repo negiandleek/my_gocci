@@ -30,7 +30,7 @@ class MessageForm extends React.Component {
 	keyDownFunc (event) {
 		if(event.keyCode === 13){
 			event.preventDefault();
-			this.props.addMessage(this.state.textValue,1);
+			this.props.add_message(this.state.textValue);
 			this.setState({
 				textValue: ''
 			});
