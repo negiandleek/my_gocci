@@ -7,9 +7,10 @@ function request_to_add_message (message) {
 	}
 }
 
-function receive_to_add_message () {
+function receive_to_add_message (message) {
 	return {
 		type: types.RECEIVE_TO_ADD_MESSAGE,
+		message
 	}
 }
 
@@ -18,7 +19,7 @@ export function add_message (message) {
 		dispatch(request_to_add_message(message));
 		return webApiUtilities.add_message_api(message)
 			.then((res) => {
-				dispatch(receive_to_add_message())
+				dispatch(receive_to_add_message(res.data))
 			})
 			.catch((err) => {
 

@@ -4,6 +4,11 @@ from bottle import get,post,route,run,request,response,static_file,HTTPResponse;
 from app.models.posts import Posts;
 from app.models.chats import Chats;
 import json;
+import re;
+
+#variable
+help_pattern = re.compile("-{,2}(h$|help$)",re.I);
+get_post_pattern = re.compile("^(find|search)(\s|\p{blank}+[0-9])?(\s|\p{blank}+\w*)?$")
 
 @route('/')
 def index():
@@ -39,18 +44,32 @@ def find_collections():
 	res.set_header("Content-Language","js-JP");
 	return res;
 
-@post("/mygocci/api/add_message")
+@post("/mygocci/api/message")
 def add_message () :
-	value = request.forms.message;
-	db = Chats();
-	db._id = Chats.objects.count() + 1;
-	db.chat_room_id = 0;
-	db.message = value;
-	db.save();
+	value = request.json["message"];
+	# db = Chats();
+	# db._id = Chats.objects.count() + 1;
+	# db.chat_room_id = 0;
+	# db.message = value;
+	# db.save();
+
 	sended_data = {
 		"status": "success",
 		"message": "post successfully added message"
 	}
+	matche_get_posts = get_post_pattern.findall(value);
+	match_help_pattern = help_pattern.match(value);
+	if match_help_pattern:
+		sended_data["data"] = "-h,help: use command\nmy: 自分の投稿を取得する";
+		sended_data["message"] += " and help command";
+	elif matche_get_posts:
+		list_data = list(matche_get_posts[0]);
+		list_replaced = [];
+		space_match = re.compile(u"\s+");
+		for i, str in enumerate(list_data):
+			list_replaced.append(space_match.sub("",str));
+		
+		sended_data["message"] += " and get posts";
 
 	res = HTTPResponse(status=200,body=sended_data);
 	res.set_header("Content-Type","application/json; charset=8");

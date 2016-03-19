@@ -5,7 +5,7 @@ connect('my_gocci_test_db');
 
 class Posts(Document):
 	_id = fields.SequenceField(required=True);
-	post_user_id = fields.IntField(required=True);
+	#post_user_id = fields.ReferenceField();
 	post_rest_id = fields.IntField(required=True);
 	movie = fields.StringField(required=True);
 

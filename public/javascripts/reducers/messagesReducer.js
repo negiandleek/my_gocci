@@ -34,7 +34,15 @@ function message_reducer(state = initialState, action) {
                 message: (()=>{
                     let i = state.message.length - 1;
                     state.message[i].is_invalidate = false;
-                    return state.message;
+                    if(typeof action.message !== "undefined"){
+                        return state.message.concat({
+                            value: action.message,
+                            is_myself: false,
+                            is_invalidate: false
+                        });
+                    }else{
+                        return state.message;
+                    }
                 })(),
                 isFetching: false,
             });
