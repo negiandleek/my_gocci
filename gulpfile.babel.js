@@ -19,7 +19,6 @@ var path = {
     public: 'public/',
     browserifyCache: '.browserify-cache/',
     static: 'static/',
-    view: 'view/',
     styleEntrypoint: 'main.scss',
     jsEntrypoint: 'main.js',
     js: 'public/javascripts/',
@@ -115,7 +114,7 @@ gulp.task('build:js', (cb) => {
 gulp.task('mv:html', (cb) => {
     return gulp.src(path.public + '{,**/}*.html')
         .pipe($.plumber())
-        .pipe(gulp.dest(path.view))
+        .pipe(gulp.dest(path.static))
 })
 
 // Sounds

@@ -7,7 +7,7 @@ import json;
 
 @route('/')
 def index():
-	return static_file("index.html",root="./view");
+	return static_file("index.html",root="./static");
 
 @route('/static/<filepath:path>')
 def static(filepath):
