@@ -19,7 +19,7 @@ export function add_message (message) {
 		dispatch(request_to_add_message(message));
 		return webApiUtilities.add_message_api(message)
 			.then((res) => {
-				dispatch(receive_to_add_message(res.data))
+				dispatch(receive_to_add_message(res.data));
 			})
 			.catch((err) => {
 
